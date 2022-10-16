@@ -1,5 +1,7 @@
 # v2board-docker
 🐳fast running v2board
+* 项目
+https://github.com/v2board/v2board-docker.git
 
 ### 安装 Docker
 ```
@@ -11,6 +13,14 @@ git clone https://github.com/v2board/v2board-docker.git
 cd v2board-docker/
 git submodule update --init
 git submodule update --remote
+```
+### 更新内容
+```
+#官方库内文件长期没有更新，需修改一下内容
+#将supervisord.conf文件内
+command=php /www/artisan queue:work --queue=send_email
+修改为
+command=php /www/artisan horizon
 ```
 
 ### 启动环境
@@ -24,6 +34,7 @@ docker-compose up -d
 ```
 docker-compose exec www bash
 wget https://getcomposer.org/install -O composer.phar
+php composer.phar
 php composer.phar install
 php artisan v2board:install
 
@@ -33,7 +44,10 @@ php artisan v2board:install
 数据库用户名：root
 数据库密码：v2boardisbest
 
+#重启服务
 chmod -R 755 ${PWD}
+exit
+docker-compose restart
 ```
 ### 升级V2Board
 ```
@@ -42,7 +56,8 @@ chmod -R 755 ${PWD}
 git submodule update --remote
 docker-compose exec www bash
 rm -rf composer.lock composer.phar
-wget https://getcomposer.org/install -O composer.phar
+wget https://getcomposer.org/installer -O composer.phar
+php composer.phar
 php composer.phar update
 php artisan v2board:update
 php artisan config:cache
