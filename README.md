@@ -3,24 +3,31 @@
 * 项目
 https://github.com/v2board/v2board-docker.git
 
-### 安装 Docker
+### 准备好`Docker`和`Docker-Compose`
 ```
-参考官方文档
+#这里采用一键脚本快速部署docker环境，如需跟随linux存储库管理docker，请参考官方文档
+curl -sSL https://get.docker.com/ | sh 
+systemctl start docker 
+systemctl enable docker
+#安装docker-compose插件
+curl -L https://github.com/docker/compose/releases/download/v2.10.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose && sudo chmod +x /usr/local/bin/docker-compose
 ```
-### 拉取代码
+### 拉取稳定代码
 ```
 git clone https://github.com/v2board/v2board-docker.git
 cd v2board-docker/
 git submodule update --init
+echo '  branch = master' >> .gitmodules
 git submodule update --remote
 ```
-### 更新内容
+### 修改docker-compose.yml等文件
 ```
-#官方库内文件长期没有更新，需修改一下内容
+#官方库内文件长期没有更新，修改一下内容
 #将supervisord.conf文件内
 command=php /www/artisan queue:work --queue=send_email
 修改为
 command=php /www/artisan horizon
+#caddy.conf中localhost可修改为域名访问80/443，或者保持不变，让宿主机监听80/443的web服务反代到容器内部
 ```
 
 ### 启动环境
@@ -48,6 +55,7 @@ php artisan v2board:install
 chmod -R 755 ${PWD}
 exit
 docker-compose restart
+
 ```
 ### 升级V2Board
 ```
