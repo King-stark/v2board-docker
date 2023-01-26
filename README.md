@@ -40,7 +40,8 @@ docker-compose up -d
 ### 安装V2Board
 ```
 docker-compose exec www bash
-wget https://getcomposer.org/install -O composer.phar
+wget https://getcomposer.org/installer -O composer.phar
+#如果需要换源，请将composer.json 中repositories url改成https://mirrors.aliyun.com/composer/
 php composer.phar
 php composer.phar install
 php artisan v2board:install
